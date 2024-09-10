@@ -378,9 +378,8 @@
 
             <div class="col-lg-6">
               <form
-                action=""
                 method="post"
-                class="php-email-form"
+                class="email-form"
                 data-aos="fade-up"
                 data-aos-delay="400"
               >
@@ -426,9 +425,9 @@
                   </div>
 
                   <div class="col-md-12 text-center">
-                    <div class="loading">Loading</div>
-                    <div class="error-message"></div>
-                    <div class="sent-message">
+                    <div class="loading" style="display: none">Loading</div>
+                    <div class="error-message" style="display: none"></div>
+                    <div class="sent-message" style="display: none">
                       Your message has been sent. Thank you!
                     </div>
 
@@ -474,5 +473,49 @@
 
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
+    ></script>
+    <script type="text/javascript">
+      (function () {
+        emailjs.init({
+          publicKey: "aBU8PxQTkKE8tk0tu",
+        });
+      })();
+
+      window.onload = function () {
+        document
+          .querySelector(".email-form")
+          .addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+
+            // Display loading message
+            document.querySelector(".loading").style.display = "block";
+
+            const formData = {
+              name: this.name.value,
+              email: this.email.value,
+              subject: this.subject.value,
+              message: this.message.value,
+            };
+
+            // EmailJS send function (replace with your IDs)
+            emailjs.send("service_an913sr", "template_ngn5wob", formData).then(
+              function (response) {
+                console.log("SUCCESS!", response.status, response.text);
+                document.querySelector(".loading").style.display = "none"; // Hide loading
+                document.querySelector(".sent-message").style.display = "block"; // Show success message
+              },
+              function (error) {
+                console.log("FAILED...", error);
+                document.querySelector(".loading").style.display = "none"; // Hide loading
+                document.querySelector(".error-message").style.display =
+                  "block"; // Show error message
+              },
+            );
+          });
+      };
+    </script>
   </body>
 </html>
